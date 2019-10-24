@@ -1,9 +1,10 @@
-#data "template_file" "hosts" {
-#  template = "${file("./hosts.tpl")}"
-#  vars = {
-#    elastic-ip-2 = "$aws_instance.torlo-tform-elastic2.private_ip.id"
-#    elastic-ip-3 = "$aws_instance.torlo-tform-elastic3.private_ip.id"
-#    logstash-ip  = "$aws_instance.torlo-tform-logstash.private_ip.id"
-#    kibana-ip    = "$aws_instance.torlo-tform-kibana.private_ip.id"
-#  }
-#}
+data "template_file" "hosts" {
+  template = "${file("./hosts.tpl")}"
+  vars = {
+    elastic-ip-1 = "${module.srv.es1_pri-ip}"
+    elastic-ip-2 = "${module.srv.es2_pri-ip}"
+    elastic-ip-3 = "${module.srv.es3_pri-ip}"
+    logstash-ip  = "${module.srv.logstash_pri-ip}"
+    kibana-ip    = "${module.srv.kibana_pri-ip}"
+  }
+}
