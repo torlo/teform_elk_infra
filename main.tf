@@ -12,7 +12,7 @@ module "vpc" {
 resource "aws_instance" "torlo-tform-ansible" {
   depends_on                  = ["module.vpc"]
   count                       = 1
-  ami                         = "ami-0f8023ddb0a6acc7a"
+  ami                         = "ami-0976f50297d2fcfd9"
   instance_type               = "t2.micro"
   subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
   associate_public_ip_address = true
@@ -49,7 +49,7 @@ resource "aws_instance" "torlo-tform-elastic1" {
   count                       = 1
   ami                         = "ami-0b432b9079015a8c0"
   instance_type               = "t2.micro"
-  subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
+  subnet_id                   = "${element(module.vpc.aws_pri_subnet, count.index)}"
   associate_public_ip_address = false
   vpc_security_group_ids      = ["${module.vpc.sg_priv-elastic}", "${module.vpc.sg_priv-ssh}"]
   key_name                    = "torlov.test"
@@ -67,7 +67,7 @@ resource "aws_instance" "torlo-tform-elastic2" {
   count                       = 1
   ami                         = "ami-0b432b9079015a8c0"
   instance_type               = "t2.micro"
-  subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
+  subnet_id                   = "${element(module.vpc.aws_pri_subnet, count.index)}"
   associate_public_ip_address = false
   vpc_security_group_ids      = ["${module.vpc.sg_priv-elastic}", "${module.vpc.sg_priv-ssh}"]
   key_name                    = "torlov.test"
@@ -84,7 +84,7 @@ resource "aws_instance" "torlo-tform-elastic3" {
   count                       = 1
   ami                         = "ami-0b432b9079015a8c0"
   instance_type               = "t2.micro"
-  subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
+  subnet_id                   = "${element(module.vpc.aws_pri_subnet, count.index)}"
   associate_public_ip_address = false
   vpc_security_group_ids      = ["${module.vpc.sg_priv-elastic}", "${module.vpc.sg_priv-ssh}"]
   key_name                    = "torlov.test"
@@ -101,7 +101,7 @@ resource "aws_instance" "torlo-tform-logstash" {
   count                       = 1
   ami                         = "ami-0b432b9079015a8c0"
   instance_type               = "t2.small"
-  subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
+  subnet_id                   = "${element(module.vpc.aws_pri_subnet, count.index)}"
   associate_public_ip_address = false
   vpc_security_group_ids      = ["${module.vpc.sg_pri-logstash}", "${module.vpc.sg_priv-ssh}"]
   key_name                    = "torlov.test"
@@ -167,5 +167,7 @@ resource "null_resource" "replace_file_hosts" {
   provisioner "remote-exec" {
     inline = ["sudo chown root:root /etc/hosts"]
   }
-
+  provisioner "remote-exec" {
+    inline = ["sudo cp /etc/hosts /etc/ansible/inventory/vars/elk_cluster/hosts.j2"]
+  }
 }
