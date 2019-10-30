@@ -12,7 +12,7 @@ module "vpc" {
 resource "aws_instance" "torlo-tform-ansible" {
   depends_on                  = ["module.vpc"]
   count                       = 1
-  ami                         = "ami-0976f50297d2fcfd9"
+  ami                         = "ami-07a5c19661b7c873c"
   instance_type               = "t2.micro"
   subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
   associate_public_ip_address = true
@@ -21,9 +21,6 @@ resource "aws_instance" "torlo-tform-ansible" {
   user_data                   = <<-EOF
     #!/bin/bash
     hostnamectl set-hostname ansible
-    $EL1IP=${aws_instance.torlo-tform-elastic1[count.index].private_ip}
-    $EL1IP=${aws_instance.torlo-tform-elastic2[count.index].private_ip}
-    $EL1IP=${aws_instance.torlo-tform-elastic3[count.index].private_ip}
   EOF
   tags = {
     Name = "torlo-tform-ansible-master"
