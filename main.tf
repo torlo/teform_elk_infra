@@ -21,6 +21,9 @@ resource "aws_instance" "torlo-tform-ansible" {
   user_data                   = <<-EOF
     #!/bin/bash
     hostnamectl set-hostname ansible
+    $EL1IP=${aws_instance.torlo-tform-elastic1[count.index].private_ip}
+    $EL1IP=${aws_instance.torlo-tform-elastic2[count.index].private_ip}
+    $EL1IP=${aws_instance.torlo-tform-elastic3[count.index].private_ip}
   EOF
   tags = {
     Name = "torlo-tform-ansible-master"
