@@ -12,7 +12,7 @@ module "vpc" {
 resource "aws_instance" "torlo-tform-ansible" {
   depends_on                  = ["module.vpc"]
   count                       = 1
-  ami                         = "ami-07a5c19661b7c873c"
+  ami                         = "ami-0636f5bac59dba1da"
   instance_type               = "t2.micro"
   subnet_id                   = "${element(module.vpc.aws_pub_subnet, count.index)}"
   associate_public_ip_address = true
